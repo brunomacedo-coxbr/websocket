@@ -1,6 +1,7 @@
 {
   "name": "websocket",
   "version": "1.0.0",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "client": "yarn --cwd ./web-client dev",

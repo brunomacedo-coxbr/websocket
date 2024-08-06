@@ -1,6 +1,7 @@
 {
-  "name": "next-ts-atomic",
+  "name": "web-server",
   "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "next dev --port 4000",
     "server": "node ./server/websocketServer.js",
