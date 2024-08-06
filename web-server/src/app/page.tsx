@@ -4,15 +4,10 @@ import { useEffect, useState } from 'react';
 const Home: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [message, setMessage] = useState<string>('');
-  // const [receivedMessage, setReceivedMessage] = useState<string>('');
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8080');
     setSocket(ws);
-
-    // ws.onmessage = (event: MessageEvent) => {
-    //   setReceivedMessage(event.data);
-    // };
 
     return () => {
       ws.close();
@@ -36,7 +31,6 @@ const Home: React.FC = () => {
         onChange={(e) => setMessage(e.target.value)}
       />
       <button onClick={sendMessage}>Enviar</button>
-      {/* <p>Mensagem recebida: {receivedMessage}</p> */}
     </div>
   );
 };

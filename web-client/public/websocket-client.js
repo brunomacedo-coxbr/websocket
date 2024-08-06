@@ -1,4 +1,4 @@
-// public/websocket-client.js
+/* // public/websocket-client.js
 const ws = new WebSocket('ws://localhost:8080');
 
 ws.onopen = () => {
@@ -25,3 +25,4 @@ function sendMessage(message) {
 
 // Expondo a função globalmente para o Next.js
 window.websocketClient = { sendMessage };
+ */
