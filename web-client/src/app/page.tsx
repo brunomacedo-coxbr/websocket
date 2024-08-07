@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { v4 as uniqueId } from 'uuid';
+import { v4 as uniqueId } from "uuid";
 import ChatItem from "@/components/chatItem";
 
 const Home: React.FC = () => {
@@ -43,14 +43,16 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h1>WebSocket com Next.js e TypeScript</h1>
-      <p>Mensagem recebida:</p>
-      <ul>
-        {receivedMessage.map((message) => (
-          <ChatItem key={uniqueId()} message={message} />
-        ))}
-      </ul>
+    <div className="text-center flex items-center justify-center p-8">
+      <div className="p-4 border max-w-sm w-full">
+        <h1>WebSocket Client</h1>
+        <p>Received messages</p>
+        <ul>
+          {receivedMessage.map((message) => (
+            <ChatItem key={uniqueId()} message={message} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
