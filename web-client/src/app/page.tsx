@@ -1,11 +1,14 @@
-"use client"
-import { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useId, useState } from "react";
+import { v4 as uniqueId } from 'uuid';
+import ChatItem from "@/components/chatItem";
 
 const Home: React.FC = () => {
-  const [receivedMessage, setReceivedMessage] = useState<string>('');
+  const keyId = useId();
+  const [receivedMessage, setReceivedMessage] = useState<string[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket("ws://localhost:8080");
 
     /* ws.onopen = () => {
       console.log('Conectado ao servidor WebSocket');
@@ -17,13 +20,13 @@ const Home: React.FC = () => {
         const reader = new FileReader();
         reader.onload = () => {
           if (reader.result) {
-            setReceivedMessage(reader.result as string);
+            setReceivedMessage((prev) => [...prev, reader.result as string]);
           }
         };
         reader.readAsText(event.data);
       } else {
         // Caso contrário, assuma que a mensagem já é texto
-        setReceivedMessage(event.data as string);
+        setReceivedMessage((prev) => [...prev, event.data as string]);
       }
     };
 
@@ -43,7 +46,12 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1>WebSocket com Next.js e TypeScript</h1>
-      <p>Mensagem recebida: {receivedMessage}</p>
+      <p>Mensagem recebida:</p>
+      <ul>
+        {receivedMessage.map((message) => (
+          <ChatItem key={uniqueId()} message={message} />
+        ))}
+      </ul>
     </div>
   );
 };
