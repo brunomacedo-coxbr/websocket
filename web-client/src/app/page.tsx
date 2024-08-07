@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uniqueId } from 'uuid';
 import ChatItem from "@/components/chatItem";
 
 const Home: React.FC = () => {
-  const keyId = useId();
   const [receivedMessage, setReceivedMessage] = useState<string[]>([]);
 
   useEffect(() => {
