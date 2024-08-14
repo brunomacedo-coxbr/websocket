@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "ws://localhost:4000";
 
 let socket: Socket;
 
