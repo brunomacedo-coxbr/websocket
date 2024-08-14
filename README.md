@@ -1,5 +1,7 @@
 # WebSocket Project
 
+![websocket diagram](image.png)
+
 ## Overview
 
 This project consists of a WebSocket server and a client application. The server is built with Node.js, Express, and Socket.IO, while the client is a Next.js application using TypeScript.
@@ -85,7 +87,7 @@ The server uses Express and Socket.IO to handle WebSocket connections and serve 
 
 - **Port:** 4000
 - **CORS Configuration:** Allows requests from `http://localhost:9000`
-- **Authentication:** Requires a specific token (`ZXhhbXBsZS10b2tlbi0xMjM0NTY=`)
+- **Authentication:** Requires a specific token (`ZXhhbXBsZS10b2tlbi0xMjM0NTY=`) = `example-token-123456`
 
 **Endpoints:**
 
