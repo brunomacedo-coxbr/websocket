@@ -1,20 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { initializeSocket } from "../utils/socket";
+import { getSocket } from "../utils/socket";
 
 const Home = () => {
   const [messages, setMessages] = useState<{ message: string, id: string }[]>([]);
 
   useEffect(() => {
-    const token = "ZXhhbXBsZS10b2tlbi0xMjM0NTY=";
-
-    const socket = initializeSocket(token);
-
-    socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
-    });
-
+    const socket = getSocket();
     socket.on("chat message", ({ message, id }) => {
       setMessages((prev) => [...prev, { message, id }]);
     });
