@@ -17,7 +17,7 @@ This project consists of a WebSocket server and a client application. The server
 
 Make sure you have the following installed:
 
-- Node.js (v14.x or higher)
+- Node.js (v18.x or higher)
 - Yarn (v1.x)
 
 ### Installation
