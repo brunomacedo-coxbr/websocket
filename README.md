@@ -1,6 +1,6 @@
 # WebSocket Project
 
-<p align="center"><img width="450" src="image.png" alt="websocket diagram" /></p>
+<p align="center"><img width="550" src="image.png" alt="websocket diagram" /></p>
 
 ## Overview
 
