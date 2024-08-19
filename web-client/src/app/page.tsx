@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     const socket = getSocket();
-    socket.on("chat message", ({ message, id }) => {
+    socket.on("send_message", ({ message, id }) => {
       setMessages((prev) => [...prev, { message, id }]);
     });
 

@@ -28,9 +28,9 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("chat message", (message) => {
+  socket.on("send_message", (message) => {
     const chat = { message, id: uniqueId() };
-    io.emit("chat message", chat);
+    io.emit("send_message", chat);
     // console.log(JSON.stringify(chat));
   });
 

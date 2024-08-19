@@ -95,7 +95,7 @@ The server uses Express and Socket.IO to handle WebSocket connections and serve 
 
 **Socket.IO Events:**
 
-- `chat message`: Broadcasts chat messages to all connected clients.
+- `send_message`: Broadcasts send "messages" to all connected clients.
 
 ### WebSocket Client (`web-client`)
 
