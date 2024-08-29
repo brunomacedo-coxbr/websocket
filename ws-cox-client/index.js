@@ -23,15 +23,6 @@ export default function WebSocketClient(url, token, onMessage) {
     }
   };
 
-  /* socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
-  */
-
-  /* socket.onclose = () => {
-    console.log("WebSocket connection closed.");
-  }; */
-
   return {
     sendMessage: (message) => {
       socket.send(message);

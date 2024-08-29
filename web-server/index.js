@@ -28,19 +28,17 @@ wss.on("connection", (ws) => {
         ws.isAuthenticated = true;
         ws.send(JSON.stringify({ type: "auth", success: true }));
         console.log("Client is logged.");
-
       } else {
         ws.send(JSON.stringify({ type: "auth", success: false }));
         ws.close(4001, "Unauthorized.");
       }
-
     } else {
       const textMessage = message.toString(); // Convert Buffer to string
       const sendMessage = { message: textMessage, id: uniqueId() };
 
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          console.log(sendMessage);
+          // console.log(sendMessage);
           client.send(JSON.stringify(sendMessage));
         }
       });

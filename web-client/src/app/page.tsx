@@ -5,14 +5,6 @@ import { IMessageData } from "ws-cox-client";
 import { getSocket } from "../utils/socket";
 
 const Home = () => {
-  /* let messages: IMessageData[] = [];
-
-  const handleMessage = ({ message, id }: IMessageData) => {
-    messages = [...messages, { message, id }];
-  };
-
-  const socket = getSocket(handleMessage); */
-
   const [messages, setMessages] = useState<IMessageData[]>([]);
 
   const handleMessage = ({ message, id }: IMessageData) => {
