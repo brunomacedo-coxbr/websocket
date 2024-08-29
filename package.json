@@ -1,6 +1,6 @@
 {
   "name": "websocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -13,6 +13,7 @@
   },
   "workspaces": [
     "web-client",
-    "web-server"
+    "web-server",
+    "ws-cox-client"
   ]
 }

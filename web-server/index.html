@@ -21,33 +21,30 @@
       <button>Send</button>
     </form>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
+    <script type="module">
+      import WebSocketClient from './ws-cox-client/index.js';
+
       const token = "ZXhhbXBsZS10b2tlbi0xMjM0NTY=";
 
-      var socket = io({
-        auth: {
-          token: token,
-        },
+      const wsClient = new WebSocketClient("ws://localhost:4000", token, (data) => {
+        if (data.message) {
+          const messages = document.getElementById("messages");
+          const item = document.createElement("li");
+          item.textContent = data.message;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+        }
       });
 
-      var form = document.getElementById("form");
-      var input = document.getElementById("input");
-      var messages = document.getElementById("messages");
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit("send_message", input.value);
+          wsClient.sendMessage(input.value);
           input.value = "";
         }
-      });
-
-      socket.on("send_message", function ({ message }) {
-        var item = document.createElement("li");
-        item.textContent = message;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
       });
     </script>
   </body>

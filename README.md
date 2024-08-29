@@ -1,15 +1,25 @@
 # WebSocket Project
 
-<p align="center"><img src="image.png" alt="websocket diagram" /></p>
-
 ## Overview
 
-This project consists of a WebSocket server and a client application. The server is built with Node.js, Express, and Socket.IO, while the client is a Next.js application using TypeScript.
+This project consists of a WebSocket server and a client application. The server is built with Node.js, Express, and the WebSocket API, while the client is a Next.js application using TypeScript.
 
 ## Project Structure
 
 - **web-client**: Contains the client-side application.
 - **web-server**: Contains the server-side application.
+- **ws-cox-client**: Contains the WebSocket front-end abstraction.
+
+```
+websocket/
+├── package.json
+├── web-client/
+│   └── package.json
+├── web-server/
+│   └── package.json
+└── ws-cox-client/
+    └── package.json
+```
 
 ## Getting Started
 
@@ -83,7 +93,7 @@ yarn dev
 
 ### WebSocket Server (`web-server`)
 
-The server uses Express and Socket.IO to handle WebSocket connections and serve an HTML file.
+The server uses Express and WebSocket to handle WebSocket connections and serve an HTML file.
 
 - **Port:** 4000
 - **CORS Configuration:** Allows requests from `http://localhost:9000`
@@ -93,13 +103,14 @@ The server uses Express and Socket.IO to handle WebSocket connections and serve 
 
 - `GET /`: Serves the `index.html` file.
 
-**Socket.IO Events:**
+**WebSocket Events:**
 
-- `send_message`: Broadcasts send "messages" to all connected clients.
+- **`auth`**: Authenticates clients. Clients must send a message with `type: "auth"` and a valid `token`. If the authentication is successful, the server sends a response with `type: "auth"` and `success: true`. Otherwise, it sends `success: false` and closes the connection with code `4001`.
+- **`message`**: Once authenticated, clients can send messages. The server broadcasts these messages to all connected clients. Each message is sent as an object with `message` (the text content) and `id` (a unique identifier).
 
 ### WebSocket Client (`web-client`)
 
-The client is built with Next.js and uses Socket.IO client to connect to the WebSocket server.
+The client is built with Next.js and uses the WebSocket API to connect to the WebSocket server.
 
 - **Port:** 9000
 
@@ -110,10 +121,11 @@ The client is built with Next.js and uses Socket.IO client to connect to the Web
 
 **Utilities:**
 
-- `initializeSocket(token: string)`: Initializes the WebSocket connection with the given token.
-- `getSocket()`: Retrieves the current socket instance.
+- `initializeSocket(token: string, onMessage: (data: IMessageData) => void)`: Initializes the WebSocket connection with the given token and message handler.
+- `getSocket(onMessage: (data: IMessageData) => void)`: Retrieves a new WebSocket client instance with the provided message handler.
 
 ## Troubleshooting
 
 - **Server not starting:** Ensure you have installed all dependencies and there are no port conflicts.
 - **Client not connecting:** Verify that the server is running and the token is correct.
+- **Authentication issues:** Confirm that the token being used is correct and matches the one expected by the server.

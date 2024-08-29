@@ -1,44 +1,57 @@
 const express = require("express");
-const { Server } = require("socket.io");
-const { createServer } = require("node:http");
-const { join } = require("node:path");
+const http = require("http");
+const WebSocket = require("ws");
+const { join } = require("path");
 const { v4: uniqueId } = require("uuid");
 
 const app = express();
-const httpServer = createServer(app);
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: "http://localhost:9000",
-    methods: ["GET", "POST"],
-  },
+app.use("/ws-cox-client", express.static(join(__dirname, "../ws-cox-client")));
+
+app.get("/", (req, res) => {
+  res.sendFile(join(__dirname, "index.html"));
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
-});
+wss.on("connection", (ws) => {
+  ws.isAuthenticated = false;
 
-io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
-  if (token === "ZXhhbXBsZS10b2tlbi0xMjM0NTY=") {
-    next();
-  } else {
-    next(new Error("Authentication error"));
-  }
-});
+  ws.on("message", (message) => {
+    if (!ws.isAuthenticated) {
+      const data = JSON.parse(message);
 
-io.on("connection", (socket) => {
-  socket.on("send_message", (message) => {
-    const sendMessage = { message, id: uniqueId() };
-    io.emit("send_message", sendMessage);
-    // console.log(JSON.stringify(sendMessage));
+      if (
+        data.type === "auth" &&
+        data.token === "ZXhhbXBsZS10b2tlbi0xMjM0NTY="
+      ) {
+        ws.isAuthenticated = true;
+        ws.send(JSON.stringify({ type: "auth", success: true }));
+        console.log("Client is logged.");
+
+      } else {
+        ws.send(JSON.stringify({ type: "auth", success: false }));
+        ws.close(4001, "Unauthorized.");
+      }
+
+    } else {
+      const textMessage = message.toString(); // Convert Buffer to string
+      const sendMessage = { message: textMessage, id: uniqueId() };
+
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          console.log(sendMessage);
+          client.send(JSON.stringify(sendMessage));
+        }
+      });
+    }
   });
 
-  socket.on("disconnect", () => {
+  ws.on("close", () => {
     console.log("Client disconnected");
   });
 });
 
-httpServer.listen(4000, () => {
-  console.log("Server listening on port 4000");
+server.listen(4000, () => {
+  console.log("Server is listening on port 4000");
 });

@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSocket } from "../utils/socket";
+import { getSocket, IMessageData } from "../utils/socket";
 
 const Home = () => {
-  const [messages, setMessages] = useState<{ message: string, id: string }[]>([]);
+  const [messages, setMessages] = useState<IMessageData[]>([]);
+
+  const handleMessage = ({ message, id }: IMessageData) => {
+    setMessages((prev) => [...prev, { message, id }]);
+  };
 
   useEffect(() => {
-    const socket = getSocket();
-    socket.on("send_message", ({ message, id }) => {
-      setMessages((prev) => [...prev, { message, id }]);
-    });
+    const socket = getSocket(handleMessage);
 
     return () => {
       socket.disconnect();
