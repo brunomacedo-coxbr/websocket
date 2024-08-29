@@ -1,9 +1,4 @@
-import WebSocketClient from "ws-cox-client";
-
-export interface IMessageData {
-  message: string;
-  id: string;
-}
+import WebSocketClient, { IMessageData } from "ws-cox-client";
 
 export const initializeSocket = (onMessage: (data: IMessageData) => void) => {
   const wsClient = new WebSocketClient(

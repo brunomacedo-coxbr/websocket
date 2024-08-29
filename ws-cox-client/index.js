@@ -10,10 +10,10 @@ export default function WebSocketClient(url, token, onMessage) {
 
     if (data.type === "auth") {
       if (data.success) {
-        console.log("Authenticated successfully");
+        console.log("Authenticated successfully.");
 
       } else {
-        console.error("Authentication failed");
+        console.error("Authentication failed.");
         socket.close();
       }
 
@@ -23,13 +23,14 @@ export default function WebSocketClient(url, token, onMessage) {
     }
   };
 
-  socket.onerror = (error) => {
+  /* socket.onerror = (error) => {
     console.error("WebSocket error:", error);
   };
+  */
 
-  socket.onclose = () => {
-    console.log("WebSocket connection closed");
-  };
+  /* socket.onclose = () => {
+    console.log("WebSocket connection closed.");
+  }; */
 
   return {
     sendMessage: (message) => {
