@@ -22,7 +22,6 @@
       }
     ],
     "paths": {
-      "ws-cox-client": ["../ws-cox-client"],
       "@/*": [
         "./src/*"
       ]

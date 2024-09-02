@@ -45,6 +45,36 @@ Make sure you have the following installed:
    yarn install
    ```
 
+### Building the Project
+
+To build the project, follow these steps:
+
+1. Navigate to the `ws-cox-client` directory:
+
+   ```bash
+   cd ws-cox-client
+   ```
+
+2. Run the build command to compile the TypeScript files and prepare the package for distribution:
+
+   ```bash
+   yarn build
+   ```
+
+3. After the build is complete, a `.tgz` file will be generated in the `ws-cox-client` directory. This file will be used to install the package locally in the `web-client`.
+
+4. Navigate to the `web-client` directory:
+
+   ```bash
+   cd ../web-client
+   ```
+
+5. Install the local package:
+
+   ```bash
+   yarn add file:../../ws-cox-client/ws-cox-client-2.0.1.tgz
+   ```
+
 ### Running the Project
 
 To run both the server and client simultaneously, use the following command from the root directory:
@@ -98,6 +128,10 @@ The server uses Express and WebSocket to handle WebSocket connections and serve 
 - **Port:** 4000
 - **CORS Configuration:** Allows requests from `http://localhost:9000`
 - **Authentication:** Requires a specific token (`ZXhhbXBsZS10b2tlbi0xMjM0NTY=`) = `example-token-123456`
+
+```bash
+ echo -n "example-token-123456" | base64
+```
 
 **Endpoints:**
 

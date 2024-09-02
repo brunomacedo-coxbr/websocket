@@ -4,6 +4,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "prestart": "yarn build",
+    "postinstall": "yarn build",
+    "build": "yarn --cwd ./ws-cox-client build",
     "client": "yarn --cwd ./web-client dev",
     "server": "yarn --cwd ./web-server server",
     "start": "concurrently \"yarn client\" \"yarn server\""

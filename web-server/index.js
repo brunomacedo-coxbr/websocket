@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-app.use("/ws-cox-client", express.static(join(__dirname, "../ws-cox-client")));
+app.use("/ws-cox-client", express.static(join(__dirname, "../ws-cox-client/dist/index.js")));
 
 app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "index.html"));

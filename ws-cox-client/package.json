@@ -1,7 +1,22 @@
 {
   "name": "ws-cox-client",
-  "version": "2.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "license": "MIT"
+  "version": "2.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruno Macedo <bruno.macedo@coxautomotive.com.br> (https://github.com/brunomacedo)",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "postbuild": "npm pack",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.5.2",
+    "typescript": "^5.5.4"
+  }
 }

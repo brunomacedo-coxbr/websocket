@@ -22,11 +22,11 @@
     </form>
 
     <script type="module">
-      import WebSocketClient from './ws-cox-client/index.js';
+      import WebSocketClient from './ws-cox-client';
 
       const token = "ZXhhbXBsZS10b2tlbi0xMjM0NTY=";
 
-      const wsClient = new WebSocketClient("ws://localhost:4000", token, (data) => {
+      const wsClient = WebSocketClient("ws://localhost:4000", token, (data) => {
         if (data.message) {
           const messages = document.getElementById("messages");
           const item = document.createElement("li");

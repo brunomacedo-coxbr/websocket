@@ -2,9 +2,9 @@ import WebSocketClient, { IMessageData } from "ws-cox-client";
 
 export const initializeSocket = (onMessage: (data: IMessageData) => void) => {
 
-  const wsClient = new WebSocketClient(
+  const wsClient = WebSocketClient(
     `${process.env.NEXT_PUBLIC_API}`,
-    process.env.NEXT_PUBLIC_TOKEN,
+    `${process.env.NEXT_PUBLIC_TOKEN}`,
     onMessage
   );
 
