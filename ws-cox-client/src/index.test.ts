@@ -2,15 +2,17 @@ import { Server } from "mock-socket";
 import WebSocketClient, { IMessageData } from ".";
 
 describe("WebSocketClient", () => {
+  let mockServer: Server;
+
   const serverUrl = "ws://localhost:4000";
   const token = "ZXhhbXBsZS10b2tlbi0xMjM0NTY=";
-  let mockServer: Server;
-  // let client: ReturnType<typeof WebSocketClient>;
 
-  beforeAll((done) => {
-    // Create a new mock server before each test
+  beforeEach(() => {
     mockServer = new Server(serverUrl);
-    done();
+  });
+
+  afterEach(() => {
+    mockServer.stop();
   });
 
   it("should send authentication message on open", (done) => {
@@ -31,7 +33,6 @@ describe("WebSocketClient", () => {
 
     mockServer.on("connection", (socket) => {
       socket.on("message", () => {
-        // Send a valid message from the server
         socket.send(JSON.stringify(mockMessage));
       });
     });
@@ -46,73 +47,67 @@ describe("WebSocketClient", () => {
     });
   });
 
-  // it("should handle authentication failure", (done) => {
-  //   mockServer.on("connection", (socket) => {
-  //     socket.on("message", () => {
-  //       // Send an authentication failure response
-  //       socket.send(JSON.stringify({ type: "auth", success: false }));
-  //     });
-  //   });
+  it("should handle authentication failure", (done) => {
+    const mockClose = jest.fn();
 
-  //   client = WebSocketClient(serverUrl, token, () => {});
+    mockServer.on("connection", (socket) => {
+      socket.on("message", () => {
+        socket.send(JSON.stringify({ type: "auth", success: false }));
+      });
 
-  //   // Wait for the client to handle authentication failure
-  //   setTimeout(() => {
-  //     // Check that the client did not reconnect
-  //     expect(mockServer.clients.length).toBe(0); // The connection should be closed
-  //     done();
-  //   }, 100);
-  // });
+      /** Spy on the close method */
+      socket.close = mockClose;
+    });
 
-  // it("should attempt to reconnect on close", (done) => {
-  //   let reconnectAttempts = 0;
-  //   mockServer.on("connection", (socket) => {
-  //     socket.on("message", () => {
-  //       // Close the server immediately to trigger a reconnection attempt
-  //       mockServer.close();
-  //     });
-  //   });
+    WebSocketClient(serverUrl, "invalid-token", () => {});
 
-  //   client = WebSocketClient(serverUrl, token, () => {});
+    setTimeout(() => {
+      try {
+        expect(mockClose).toHaveBeenCalled();
+        done();
+      } catch (error) {
+        done(error);
+      } finally {
+        mockServer.close();
+      }
+    }, 100);
+  });
 
-  //   // Reopen the server after a short delay to allow for reconnection attempt
-  //   setTimeout(() => {
-  //     mockServer = new Server(serverUrl); // Reopen the server
+  it("should attempt to reconnect on close", (done) => {
+    let reconnectAttempts = 0;
 
-  //     // Simulate reconnection attempt
-  //     setTimeout(() => {
-  //       reconnectAttempts++;
-  //       expect(reconnectAttempts).toBeGreaterThan(0);
-  //       done();
-  //     }, 1000); // Wait enough time to check if reconnection happens
-  //   }, 1000); // Allow time for the client to attempt reconnection
-  // });
+    WebSocketClient(serverUrl, token, () => {});
+    mockServer.stop();
 
-  // it("should stop reconnecting after 10 attempts", (done) => {
-  //   let reconnectAttempts = 0;
-  //   mockServer.on("connection", (socket) => {
-  //     socket.on("message", () => {
-  //       // Close the server to trigger reconnections
-  //       mockServer.close();
-  //     });
-  //   });
+    setTimeout(() => {
+      mockServer = new Server(serverUrl);
 
-  //   client = WebSocketClient(serverUrl, token, () => {});
+      setTimeout(() => {
+        reconnectAttempts++;
+        expect(reconnectAttempts).toBeGreaterThan(0);
+        done();
+      }, 100);
+    }, 100);
+  });
 
-  //   // Reopen the server after a short delay
-  //   const attemptReconnect = () => {
-  //     setTimeout(() => {
-  //       if (reconnectAttempts < 10) {
-  //         reconnectAttempts++;
-  //         mockServer = new Server(serverUrl); // Reopen the server
-  //         attemptReconnect(); // Continue attempting to reconnect
-  //       } else {
-  //         expect(reconnectAttempts).toBe(10); // Ensure it stopped after 10 attempts
-  //         done();
-  //       }
-  //     }, 5000); // Wait long enough to simulate reconnection intervals
-  //   };
+  it("should stop reconnecting after 10 attempts", (done) => {
+    let reconnectAttempts = 0;
 
-  //   attemptReconnect();
-  // });
+    WebSocketClient(serverUrl, token, () => {});
+    mockServer.stop();
+
+    const attemptReconnect = () => {
+      setTimeout(() => {
+        if (reconnectAttempts < 10) {
+          reconnectAttempts++;
+          attemptReconnect();
+        } else {
+          expect(reconnectAttempts).toBe(10);
+          done();
+        }
+      }, 100);
+    };
+
+    attemptReconnect();
+  });
 });

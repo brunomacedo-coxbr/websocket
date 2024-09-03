@@ -6,6 +6,8 @@
   "scripts": {
     "prestart": "yarn build",
     "postinstall": "yarn build",
+    "test": "yarn --cwd ./ws-cox-client test",
+    "test:watch": "yarn --cwd ./ws-cox-client test:watch",
     "build": "yarn --cwd ./ws-cox-client build",
     "client": "yarn --cwd ./web-client dev",
     "server": "yarn --cwd ./web-server server",
