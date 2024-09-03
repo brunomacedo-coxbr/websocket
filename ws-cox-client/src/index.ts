@@ -22,6 +22,11 @@ export interface IMessageData {
   id: string;
 }
 
+export interface WSClient {
+  sendMessage: (message: string) => void;
+  disconnect: () => void;
+}
+
 /**
  * Represents the different types of messages that can be received or sent.
  */
@@ -72,6 +77,7 @@ export default function WebSocketClient(
   token: string,
   onMessage: (data: IMessageData) => void
 ) {
+  let authFailed = false;
   let socket: WebSocket;
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 10;
@@ -81,6 +87,7 @@ export default function WebSocketClient(
     socket = new WebSocket(url);
 
     socket.onopen = () => {
+      authFailed = false; // Reset authFailed on new connection attempt
       reconnectAttempts = 0; // Reset reconnect attempts on successful connection
       const authMessage: AuthMessage = { type: "auth", token: token };
       socket.send(JSON.stringify(authMessage));
@@ -95,6 +102,7 @@ export default function WebSocketClient(
             console.log("Authenticated successfully.");
           } else {
             console.error("Authentication failed.");
+            authFailed = true;
             socket.close();
           }
         } else {
@@ -111,7 +119,7 @@ export default function WebSocketClient(
     };
 
     socket.onclose = () => {
-      if (reconnectAttempts < maxReconnectAttempts) {
+      if (!authFailed && reconnectAttempts < maxReconnectAttempts) {
         console.log(
           `Socket closed. Attempting to reconnect... (${
             reconnectAttempts + 1
@@ -119,6 +127,8 @@ export default function WebSocketClient(
         );
         reconnectAttempts++;
         setTimeout(connect, reconnectInterval);
+      } else if (authFailed) {
+        console.error("Authentication failed. Will not attempt to reconnect.");
       } else {
         console.error("Max reconnect attempts reached. Giving up.");
       }
@@ -150,5 +160,5 @@ export default function WebSocketClient(
     disconnect: () => {
       socket.close();
     },
-  };
+  } as WSClient;
 }
