@@ -45,6 +45,7 @@ function isAuthResponse(message: Message): message is AuthResponse {
 }
 
 /**
+ * Factory Pattern
  * Creates a WebSocket client that connects to the specified URL, handles authentication, and processes messages.
  * @param url - The URL to connect to.
  * @param token - The authentication token.

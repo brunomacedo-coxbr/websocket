@@ -8,6 +8,9 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// const TOKEN = "ZXhhbXBsZS10b2tlbi03ODc4";
+const TOKEN = "ZXhhbXBsZS10b2tlbi0xMjM0NTY=";
+
 app.use("/ws-cox-client", express.static(join(__dirname, "../ws-cox-client/dist/index.js")));
 
 app.get("/", (req, res) => {
@@ -23,7 +26,7 @@ wss.on("connection", (ws) => {
 
       if (
         data.type === "auth" &&
-        data.token === "ZXhhbXBsZS10b2tlbi0xMjM0NTY="
+        data.token === TOKEN
       ) {
         ws.isAuthenticated = true;
         ws.send(JSON.stringify({ type: "auth", success: true }));
